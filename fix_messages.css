@@ -1,0 +1,8 @@
+div.messages {
+	max-height: none !important;
+}
+
+#growl {
+	position: static !important;
+	width: auto !important;
+}

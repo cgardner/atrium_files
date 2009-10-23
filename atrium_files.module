@@ -1,0 +1,56 @@
+<?php
+
+include_once('atrium_files.features.inc');
+
+/**
+ * Implementation of hook_init
+ *
+ * @return void
+ * @author Craig Gardner
+ **/
+function atrium_files_init() {
+  drupal_add_css(drupal_get_path('module', 'atrium_files') .'/atrium_files.css');
+} // end function atrium_files_init()
+
+/**
+ * Implementation of hook_strongarm
+ *
+ * @return void
+ * @author Craig Gardner
+ **/
+function atrium_files_strongarm() {
+  $conf = array (
+	  'og_content_type_usage_file' => 'omitted',
+	);
+	return $conf;
+} // end function atrium_files_strongarm()
+
+/**
+ * Preprocess hook
+ *
+ * @return void
+ * @author Craig Gardner
+ **/
+function atrium_files_preprocess_views_view_fields(&$vars) {
+
+	if ($vars['view']->name == 'atrium_files') {
+		_atrium_preprocess_view_atrium_files_fields($vars);
+	} else {
+	  template_preprocess_views_view_fields($vars);
+	}
+}
+
+/**
+ * Custom Preprocess Hook.
+ *
+ * @return void
+ * @author Craig Gardner
+ **/
+function _atrium_preprocess_view_atrium_files_fields(&$vars) {
+	drupal_add_css(drupal_get_path('module', 'atrium_files') .'/fix_messages.css');
+	$row = $vars['row'];
+	$file = field_file_load($row->node_data_field_document_file_field_document_file_fid);
+	// dpm(base_path());
+	$link = '<a href="'. base_path() . $file['filepath'] .'">'. $row->node_title .'</a>';
+	$vars['fields']['title']->content = $link;
+} // end function _atrium_preprocess_view_atrium_files_fields()
